@@ -1,0 +1,60 @@
+message CREANDO GRUPOS
+submessage CREANDO GRUPO ASMADMIN
+groupadd asmadmin
+submessage CREANDO GRUPO OINSTALL
+groupadd oinstall
+submessage CREANDO GRUPO ASMDBA
+groupadd asmdba
+message CREANDO USUARIOS NUEVOS
+submessage CREANDO USUARIO DE ORACLE
+useradd oracle
+submessage AGREGANDO USUARIO ORACLE A OINSTALL Y ASMDBA
+usermod -g oinstall oracle
+usermod -a -G asmdba oracle
+submessage CREANDO USUARIO GRID Y AGREGANDOLO A GRUPO OINSTALL, ASMADMIN Y ASMDBA
+useradd -u 54323 -g oinstall -G asmadmin,asmdba grid
+message CREANDO LOS DIRECTORIOS NECESARIOS
+submessage Creando directorio /u01/app/oracle/product/19.0.0/db_1
+sudo mkdir -p /u01/app/oracle/product/19.0.0/db_1
+submessage CREANDO CARPETA /u01/app/grid
+sudo mkdir -p /u01/app/grid
+submessage CREANDO CARPETA /u01/app/19.0.0/grid
+sudo mkdir -p /u01/app/19.0.0/grid
+sudo chown -R grid:oinstall /u01
+sudo chown -R oracle:oinstall /u01/app/oracle
+sudo chmod -R 775 /u01
+message CREANDO LOS PERFILES BASH
+submessage CREANDO PERFIL BASH DE ORACLE
+mv /home/oracle/.bash_profile /home/oracle/.bash_profile.old
+cp perfil.txt /home/oracle/.bash_profile
+chown oracle:oinstall /home/oracle/.bash_profile
+submessage CREANDO PERFIL BASH DE GRID
+mv /home/grid/.bash_profile /home/grid/.bash_profile_old
+cp perfil2.txt /home/grid/.bash_profile
+chown grid:oinstall /home/grid/.bash_profile
+message INSTALANDO INSTANCIAS oracleasm-support Y kmod-oracleasm
+sudo yum install oracleasm-support
+sudo yum install install kmod-oracleasm
+clear
+alert A CONTINUACION SE CONFIGURA ORACLEASM POR LO QUE DEBERA PRESIONAR LAS SIGUIENTES palabras grid, oinstall, y, y
+sudo oracleasm configure -i
+/usr/sbin/oracleasm init
+sudo fdisk -l | grep "Disk /dev/sd"
+sudo df -h
+alert A CONTINUACION SE CONFIGURAR LA PARTICIÓN DEL DISCO /dev/sdb, favor de presionar las siguientes teclas en el siguiente orden n, p, l, enter, enter, w
+fdisk /dev/sdb
+fdisk /dev/sdc
+submessage ASIGNADO VOLUMENES A ORACLE ASM
+oracleasm createdisk OCRDISK1 /dev/sdb1
+oracleasm createdisk DATADISK1 /dev/sdc1
+submessage LISTANDO DISCOS DE ORACLE ASM
+oracleasm listdisks
+message INSTALANDO LIBRERIAS ksh Y libaio-devel.x86_64
+yum install ksh
+yum install libaio-devel.x86_64
+message CONFIGURANDO
+cp kernel.txt /etc/sysctl.d/97-oracle-database-sysctl.conf
+MESSAGE EJECUTANDO /sbin/sysctl --system
+/sbin/sysctl --system
+alert SE VA A REINICAR EL EQUIPO
+reboot
