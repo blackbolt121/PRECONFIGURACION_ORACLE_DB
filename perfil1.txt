@@ -27,5 +27,4 @@ CLASSPATH=${CLASSPATH}:$ORACLE_HOME/network/jlib
 export CLASSPATH
 export TEMP=/tmp
 export TMPDIR=/tmp
-umask 022' > /home/oracle/.bash_profile
-chown oracle:oinstall /home/oracle/.bash_profile
+umask 022

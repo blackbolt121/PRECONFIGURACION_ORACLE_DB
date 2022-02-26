@@ -34,7 +34,7 @@ cp perfil2.txt /home/grid/.bash_profile
 chown grid:oinstall /home/grid/.bash_profile
 message INSTALANDO INSTANCIAS oracleasm-support Y kmod-oracleasm
 sudo yum install oracleasm-support
-sudo yum install install kmod-oracleasm
+sudo yum install kmod-oracleasm
 clear
 alert A CONTINUACION SE CONFIGURA ORACLEASM POR LO QUE DEBERA PRESIONAR LAS SIGUIENTES palabras grid, oinstall, y, y
 sudo oracleasm configure -i
